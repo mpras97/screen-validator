@@ -1,0 +1,6 @@
+htmlmin==0.1.12
+matplotlib==3.2.2
+networkx==2.4
+selenium==3.141.0
+beautifulsoup4==4.9.1
+lxml==4.5.1

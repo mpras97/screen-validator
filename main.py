@@ -4,6 +4,7 @@ import htmlmin
 import matplotlib.pyplot as plt
 import networkx as nx
 from selenium import webdriver
+from .element_node import ElementNode
 
 # parser = argparse.ArgumentParser()
 # parser.add_argument("location", help="location of the python file whose graph is to be added")
@@ -18,35 +19,6 @@ driver.find_element_by_css_selector("button[class='btn btn-info btn-lg w-100']")
 time.sleep(20)
 page_source = driver.page_source
 html_text = htmlmin.minify(page_source, remove_empty_space=True)
-
-
-class ElementNode:
-    def __init__(self, name, id=None, className=None):
-        self.name = name
-        self.id = id
-        self.className = className
-
-    def __str__(self):
-        if self.id:
-            if self.className:
-                return self.name + f".{self.className}" + f"#{self.id}"
-            else:
-                return self.name + f"#{self.id}"
-        elif self.className:
-            return self.name + f".{self.className}"
-        else:
-            return self.name
-
-    def __repr__(self):
-        if self.id:
-            if self.className:
-                return self.name + f".{self.className}" + f"#{self.id}"
-            else:
-                return self.name + f"#{self.id}"
-        elif self.className:
-            return self.name + f".{self.className}"
-        else:
-            return self.name
 
 
 G = nx.Graph()
@@ -101,17 +73,10 @@ while len(html_text) > 0:
         node_names.append(node_name)
         G.add_node(node)
         if parent_node:
-            # print("Here")
-            # print(parent_node)
             G.add_edge(parent_node, node)
         parent_node = node
 
-    # print("Here")
     html_text = html_text[stop_key_pos + 1:]
-    # print(html_text)
-
-# print(G.nodes)
-# print(G.edges)
 
 plt.subplot(121)
 nx.draw(G, with_labels=True, font_weight='bold')
